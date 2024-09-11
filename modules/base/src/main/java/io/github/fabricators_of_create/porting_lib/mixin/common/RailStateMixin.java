@@ -1,22 +1,23 @@
 package io.github.fabricators_of_create.porting_lib.mixin.common;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-
-import io.github.fabricators_of_create.porting_lib.block.FlexibilityCheckingRailBlock;
-
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+
+import io.github.fabricators_of_create.porting_lib.block.FlexibilityCheckingRailBlock;
 import io.github.fabricators_of_create.porting_lib.block.SlopeCreationCheckingRailBlock;
-
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.RailState;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Property;
 
 @Mixin(RailState.class)
 public abstract class RailStateMixin {
@@ -35,6 +36,11 @@ public abstract class RailStateMixin {
 
 	@Shadow
 	private BlockState state;
+
+	@Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;getValue(Lnet/minecraft/world/level/block/state/properties/Property;)Ljava/lang/Comparable;"))
+	private Comparable<?> port_lib$redirectRailDirectionCheck(BlockState instance, Property<?> property) {
+		return block.getRailDirection(state, level, pos, (AbstractMinecart) null);
+	}
 
 	@WrapOperation(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/BaseRailBlock;isStraight()Z"))
 	private boolean port_lib$redirectIsStraightCheckToCheckFlexibility(BaseRailBlock instance, Operation<Boolean> original) {
