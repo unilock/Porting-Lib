@@ -25,8 +25,13 @@ public class MinecartAndRailUtil {
 		return rail.builtInRegistryHolder().is(ACTIVATOR_RAILS);
 	}
 
+	@Deprecated
 	public static RailShape getDirectionOfRail(BlockState state, BlockGetter world, BlockPos pos, @Nullable BaseRailBlock block) {
 		return ((BaseRailBlockExtensions) state.getBlock()).getRailDirection(state, world, pos, block);
+	}
+
+	public static RailShape getDirectionOfRail(BlockState state, BlockGetter world, BlockPos pos, @Nullable AbstractMinecart cart) {
+		return ((BaseRailBlockExtensions) state.getBlock()).getRailDirection(state, world, pos, cart);
 	}
 
 	// carts

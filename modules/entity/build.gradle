@@ -1,4 +1,7 @@
 portingLib {
-	addModuleDependency("mixin_extensions")
+	addModuleDependencies([
+			"extensions",
+			"mixin_extensions"
+	])
 	enableTestMod()
 }

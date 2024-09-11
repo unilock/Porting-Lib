@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.Unique;
 import io.github.fabricators_of_create.porting_lib.extensions.extensions.BaseRailBlockExtensions;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -22,6 +23,12 @@ public abstract class BaseRailBlockMixin implements BaseRailBlockExtensions {
 	@Unique
 	@Override
 	public RailShape getRailDirection(BlockState state, BlockGetter world, BlockPos pos, @Nullable BaseRailBlock cart) {
+		return state.getValue(getShapeProperty());
+	}
+
+	@Unique
+	@Override
+	public RailShape getRailDirection(BlockState state, BlockGetter world, BlockPos pos, @Nullable AbstractMinecart cart) {
 		return state.getValue(getShapeProperty());
 	}
 }
